@@ -37,7 +37,7 @@ public abstract class Tweet implements Tweetable{
         }
     }
 
-    public abstract boolean isImportant();
+    public abstract Boolean isImportant();
 
 
 
