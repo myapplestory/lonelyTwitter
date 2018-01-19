@@ -3,7 +3,7 @@ package ca.ualberta.cs.lonelytwitter;
 
 import java.util.Date;
 
-public abstract class CurrentMood {
+public abstract class CurrentMood implements Moodable{
     private String mood;
     private Date date;
 
