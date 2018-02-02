@@ -18,6 +18,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+/*
+ *
+ *
+ * @author joshua2ua
+ * 
+ *
+ */
+
+
+
 public class LonelyTwitterActivity extends Activity {
 
 	private static final String FILENAME = "file.sav";
