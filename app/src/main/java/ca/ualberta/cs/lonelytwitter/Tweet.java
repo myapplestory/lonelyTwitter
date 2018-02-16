@@ -1,52 +1,51 @@
 package ca.ualberta.cs.lonelytwitter;
 
-
 import java.util.Date;
-import java.util.List;
 
-public abstract class Tweet implements Tweetable{
+
+public abstract class Tweet implements Tweetable, Comparable<Tweet> {
     private String message;
     private Date date;
-    private List<CurrentMood> currentmoods;
 
+    public int compareTo(Tweet tweet){
+        return getDate().compareTo(tweet.getDate());
+    }
 
-    public Tweet(String message) {
+    Tweet(String message){
         this.message = message;
-        this.date = new Date();
+        date = new Date();
     }
 
-    public Tweet(String message, Date date) {
+    Tweet(String message, Date date){
         this.message = message;
-        this.date = date;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
         this.date = date;
     }
 
     public String getMessage(){
-        return this.message;
+        return message;
     }
 
-    public void setMessage(String message) throws TweetTooLongException {
-        if (message.length() > 140) {
-            throw new TweetTooLongException();
-        } else {
+    public void setMessage(String message) throws TweetTooLongException{
+        if (message.length() < 140){
             this.message = message;
+        } else {
+            throw new TweetTooLongException();
         }
     }
 
-    public void AddMood(CurrentMood mood) {
-        this.currentmoods.add(mood);
+    public Date getDate(){
+        return date;
     }
 
+    public void setDate(Date date){
+        this.date = date;
+    }
 
     public abstract Boolean isImportant();
 
+    public String toString() {
+        return date.toString() + " | " + message;
+    }
 
 
 }
