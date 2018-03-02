@@ -9,12 +9,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,13 +23,21 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+
 public class LonelyTwitterActivity extends Activity {
+
+	private LonelyTwitterActivity activity = this;
 
 	private static final String FILENAME = "file.sav";
 	private EditText bodyText;
 	private ListView oldTweetsList;
 	private ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
 	private ArrayAdapter<Tweet> adapter;
+
+
+	public ListView getOldTweetsList(){
+		return oldTweetsList;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,10 +46,10 @@ public class LonelyTwitterActivity extends Activity {
 
 		bodyText = (EditText) findViewById(R.id.body);
 		Button saveButton = (Button) findViewById(R.id.save);
+		Button clearButton = (Button) findViewById(R.id.clear);
 		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList);
 
 		saveButton.setOnClickListener(new View.OnClickListener() {
-
 			public void onClick(View v) {
 				setResult(RESULT_OK);
 				String text = bodyText.getText().toString();
@@ -51,11 +59,33 @@ public class LonelyTwitterActivity extends Activity {
 				saveInFile();
 			}
 		});
+
+		clearButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				setResult(RESULT_OK);
+				tweetList.clear();
+				adapter.notifyDataSetChanged();
+				saveInFile();
+			}
+		});
+
+		oldTweetsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				Intent intent = new Intent(activity, EditTweetActivity.class);
+				intent.putExtra("text", tweetList.get(i).getMessage());
+
+
+
+
+				startActivity(intent);
+			}
+		});
+
 	}
 
 	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
+	protected void onStart() {		// TODO Auto-generated method stub
 		super.onStart();
 		loadFromFile();
 		adapter = new ArrayAdapter<Tweet>(this,
@@ -75,9 +105,6 @@ public class LonelyTwitterActivity extends Activity {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			tweetList = new ArrayList<Tweet>();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			throw new RuntimeException();
 		}
 	}
 
